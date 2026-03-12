@@ -1,0 +1,18 @@
+# API Endpoint Documentation
+
+## 1. Description
+
+This endpoint retrieves a list of blog posts, returning an array of post objects that include identifying information, a title, and body content for each post.
+
+## 2. Field Descriptions
+
+| Field    | Type    | Description                                                                                          |
+| -------- | ------- | ---------------------------------------------------------------------------------------------------- |
+| `userId` | Integer | The unique identifier of the user (author) who created the post.                                     |
+| `id`     | Integer | The unique identifier for the post itself, used to distinguish it from all other posts in the system. |
+| `title`  | String  | The headline or title of the blog post, providing a brief summary of its content.                    |
+| `body`   | String  | The main text content of the blog post, containing the full message or article written by the author. |
+
+## 3. Example Use Case
+
+**Displaying a blog feed on a front-end application:** A developer building a blogging platform could call this endpoint to fetch all posts and render them on a homepage. The `title` could be displayed as a clickable headline, the `body` could be shown as a preview snippet (e.g., truncated to the first 100 characters), and the `userId` could be used to make an additional API call to fetch and display the author's name and profile picture alongside each post.

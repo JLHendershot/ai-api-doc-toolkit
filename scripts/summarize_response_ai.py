@@ -3,7 +3,10 @@ import os
 import json
 
 # Load the API data we fetched in Script 1
-with open("data/raw_api_resopnse.json", "r") as f:
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "../data/raw_api_resopnse.json")
+
+with open(DATA_FILE, "r") as f:
     api_data = json.load(f)
     
 # Convert it into a string for the AI to process
@@ -38,8 +41,10 @@ print("AI Summary:")
 print(summary)
 
 # Save it for Script 3 to use
-os.makedirs("data", exist_ok=True)
-with open("data/ai_summary.txt", "w") as f:
+SUMMARY_FILE = os.path.join(BASE_DIR, "../data/ai_summary.txt")
+
+with open(SUMMARY_FILE, "w") as f:
     f.write(summary)
     
-print("\nSummary saved to data/ai_summary.txt")     
+print(f"/nSummary saved to {SUMMARY_FILE}")
+      
