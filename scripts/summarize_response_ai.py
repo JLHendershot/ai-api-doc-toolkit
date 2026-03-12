@@ -20,7 +20,7 @@ client = anthropic.Anthropic()
 prompt = f"""
 You are a technical writer. I have an API response below. Please do three things:
 1. Write a one-sentence description of what this endpoint does.
-2. List each field and explian what it contains in plain English.
+2. List each field and explain what it contains in plain English.
 3. Give one example use case for this API endpoint.
 
 API response:
