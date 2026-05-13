@@ -1,0 +1,10 @@
+{
+  "apis": [
+    {
+      "name": "jsonplaceholder_posts",
+      "url": "https://jsonplaceholder.typicode.com/posts",
+      "method": "GET",
+      "limit": 5
+    }
+  ]
+}

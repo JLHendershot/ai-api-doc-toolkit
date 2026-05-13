@@ -1,10 +1,11 @@
-import anthropic
 import os
 import json
+import anthropic
 
 # Load the API data we fetched in Script 1
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_FILE = os.path.join(BASE_DIR, "../data/raw_api_resopnse.json")
+API_NAME = "jsonplaceholder_posts"
+DATA_FILE = os.path.join(BASE_DIR, f"../data/{API_NAME}_raw.json")
 
 with open(DATA_FILE, "r") as f:
     api_data = json.load(f)
@@ -18,10 +19,23 @@ client = anthropic.Anthropic()
 
 # Build the prompt for the AI
 prompt = f"""
-You are a technical writer. I have an API response below. Please do three things:
-1. Write a one-sentence description of what this endpoint does.
-2. List each field and explain what it contains in plain English.
-3. Give one example use case for this API endpoint.
+
+You are a technical writer.
+
+Return your response in VALID JSON ONLY.
+
+Use this structure:
+
+{{
+  "endpoint_summary": "string",
+  "field_descriptions": {{
+    "field_name": "plain English explanation"
+  }},
+  "use_cases": ["string"],
+  "example": "string"
+}}
+
+Do NOT include any extra text outside JSON.
 
 API response:
 {api_data_str}
@@ -41,7 +55,7 @@ print("AI Summary:")
 print(summary)
 
 # Save it for Script 3 to use
-SUMMARY_FILE = os.path.join(BASE_DIR, "../data/ai_summary.txt")
+SUMMARY_FILE = os.path.join(BASE_DIR, f"../data/{API_NAME}_summary.json")
 
 with open(SUMMARY_FILE, "w") as f:
     f.write(summary)

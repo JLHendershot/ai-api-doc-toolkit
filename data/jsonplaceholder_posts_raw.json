@@ -1,17 +1,3 @@
-# API Documentation - Posts Endpoint
-
-**Generated:** May 13, 2026
-**Endpoint:** GET https://jsonplaceholder.typicode.com/posts
-**Tool:** ai-api-doc-toolkit
-
----
-
-## AI Analysis
-Returns a list of posts. Each post is an object containing an identifier for the author, a unique post ID, a title, and a body of text. The response is a JSON array of post objects, typically used to retrieve blog-style or forum-style content entries.
-
----
-## Sample API Response
-```json
 [
   {
     "userId": 1,
@@ -44,4 +30,3 @@ Returns a list of posts. Each post is an object containing an identifier for the
     "body": "repudiandae veniam quaerat sunt sed\nalias aut fugiat sit autem sed est\nvoluptatem omnis possimus esse voluptatibus quis\nest aut tenetur dolor neque"
   }
 ]
-```

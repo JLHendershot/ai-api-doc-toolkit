@@ -2,17 +2,33 @@ import requests
 import json
 import os
 
-# The API we are calling - no key needed
-url = "https://jsonplaceholder.typicode.com/posts"
-# Make the GET request to the API
-response = requests.get(url)
-# Convert the response to Python-readable JSON
-data = response.json()
-# Only keep the first five results to keep things manageable
-sample = data[:5]
-# Make sure the data folder exists
-os.makedirs("data", exist_ok=True)
-# Save the sample data to a JSON file
-with open("data/raw_api_resopnse.json", "w") as f:
-    json.dump(sample, f, indent=4)
-print("Done! API data saved to data/raw_api_resopnse.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(BASE_DIR, "../config/api_config.json")
+
+def load_config():
+    with open(CONFIG_PATH, "r") as f:
+        return json.load(f)
+    
+def fetch_api(api):
+    url = api["url"]
+    name = api["name"]
+    limit = api.get("limit", 10)
+    
+    response = requests.get(url)
+    data = response.json()
+    
+    trimmed = data[:limit]
+    
+    output_path = os.path.join(BASE_DIR, f"../data/{name}_raw.json")
+    with open(output_path, "w") as f:
+        json.dump(trimmed, f, indent=2)
+        
+    print(f"Saved: {output_path}")
+    
+def main():            
+    config = load_config()
+    for api in config["apis"]:
+        fetch_api(api)
+        
+if __name__ == "__main__":
+    main()        

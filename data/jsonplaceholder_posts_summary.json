@@ -1,0 +1,17 @@
+{
+  "endpoint_summary": "Returns a list of posts. Each post is an object containing an identifier for the author, a unique post ID, a title, and a body of text. The response is a JSON array of post objects, typically used to retrieve blog-style or forum-style content entries.",
+  "field_descriptions": {
+    "userId": "The unique identifier of the user (author) who created the post.",
+    "id": "The unique identifier for the post itself.",
+    "title": "The title or headline of the post.",
+    "body": "The main text content of the post. May contain newline characters indicating paragraph breaks."
+  },
+  "use_cases": [
+    "Fetching a list of blog posts to display on a homepage or feed.",
+    "Retrieving all posts authored by a specific user by filtering on the userId field.",
+    "Displaying post titles in a summary list view, with the option to expand and show the full body.",
+    "Paginating through content entries in a content management system.",
+    "Using as mock or placeholder data for front-end prototyping and testing."
+  ],
+  "example": "GET /posts — Returns an array of post objects. Example item: { \"userId\": 1, \"id\": 1, \"title\": \"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\", \"body\": \"quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto\" }"
+}
