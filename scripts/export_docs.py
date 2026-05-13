@@ -2,24 +2,29 @@ import json
 import os
 from datetime import date
 
+CONFIG_PATH = os.path.join(BASE_DIR, "../config/api_config.json")
+def load_config():
+    with open(CONFIG_PATH, "r") as f:
+        return json.load(f)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Load the raw API data
-with open(os.path.join(BASE_DIR, "../data/jsonplaceholder_posts_raw.json"), "r") as f:
-    api_data = json.load(f)
+def export_docs(api):
+    api_name = api["name"]
+    url = api["url"]
 
-# Load the AI summary
-with open(os.path.join(BASE_DIR, "../data/jsonplaceholder_posts_summary.json"), "r") as f:
-    ai_summary = json.load(f)
+    with open(os.path.join(BASE_DIR, f"../data/{api_name}_raw.json"), "r") as f:
+        api_data = json.load(f)
 
-# Get today's date for the document
-today = date.today().strftime("%B %d, %Y")
+    with open(os.path.join(BASE_DIR, f"../data/{api_name}_summary.json"), "r") as f:
+        ai_summary = json.load(f)
 
-# Build the Markdown content
-markdown_content = f"""# API Documentation - Posts Endpoint
+    today = date.today().strftime("%B %d, %Y")
+
+    markdown_content = f"""# API Documentation - {api_name}
 
 **Generated:** {today}
-**Endpoint:** GET https://jsonplaceholder.typicode.com/posts
+**Endpoint:** GET {url}
 **Tool:** ai-api-doc-toolkit
 
 ---
@@ -34,9 +39,19 @@ markdown_content = f"""# API Documentation - Posts Endpoint
 ```
 """
 
-# Save the Markdown file
-os.makedirs("docs", exist_ok=True)
-with open("docs/generated_api_summary.md", "w") as f:
-    f.write(markdown_content)
-    
-print("Documentation exported to docs/generated_api_summary.md")  
+    docs_dir = os.path.join(BASE_DIR, "../docs")
+    os.makedirs(docs_dir, exist_ok=True)
+    output_path = os.path.join(docs_dir, f"{api_name}_summary.md")
+
+    with open(output_path, "w") as f:
+        f.write(markdown_content)
+
+    print(f"Documentation exported to {output_path}")
+
+def main():
+    config = load_config()
+    for api in config["apis"]:
+        export_docs(api)
+
+if __name__ == "__main__":
+    main()

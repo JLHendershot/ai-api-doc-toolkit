@@ -15,6 +15,7 @@ def fetch_api(api):
     limit = api.get("limit", 10)
     
     response = requests.get(url)
+    response.raise_for_status()
     data = response.json()
     
     trimmed = data[:limit]

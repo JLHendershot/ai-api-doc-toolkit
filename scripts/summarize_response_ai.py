@@ -2,13 +2,14 @@ import os
 import json
 import anthropic
 
+CONFIG_PATH = os.path.join(BASE_DIR, "../config/api_config.json")
+
+def load_config():
+    with open(CONFIG_PATH, "r") as f:
+        return json.load(f)
+
 # Load the API data we fetched in Script 1
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-API_NAME = "jsonplaceholder_posts"
-DATA_FILE = os.path.join(BASE_DIR, f"../data/{API_NAME}_raw.json")
-
-with open(DATA_FILE, "r") as f:
-    api_data = json.load(f)
     
 # Convert it into a string for the AI to process
 api_data_str = json.dumps(api_data, indent=2)
@@ -18,7 +19,8 @@ api_data_str = json.dumps(api_data, indent=2)
 client = anthropic.Anthropic()
 
 # Build the prompt for the AI
-prompt = f"""
+def prompt_template(api_data_str):
+  return f"""
 
 You are a technical writer.
 
@@ -41,24 +43,32 @@ API response:
 {api_data_str}
 """
 # Send to the AI
-message = client.messages.create(
-    model="claude-opus-4-6",
-    max_tokens=1024,
-    messages=[{"role": "user", "content": prompt}]
-)    
-    
-# Get the AI's response
-summary = message.content[0].text
+def summarize_api(api_name):
+    data_file = os.path.join(BASE_DIR, f"../data/{api_name}_raw.json")
+    with open(data_file, "r") as f:
+        api_data = json.load(f)
 
-# Print it so you can see it
-print("AI Summary:")
-print(summary)
+    api_data_str = json.dumps(api_data, indent=2)
 
-# Save it for Script 3 to use
-SUMMARY_FILE = os.path.join(BASE_DIR, f"../data/{API_NAME}_summary.json")
+    message = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=1024,
+        messages=[{"role": "user", "content": prompt_template(api_data_str)}]
+    )
 
-with open(SUMMARY_FILE, "w") as f:
-    f.write(summary)
-    
-print(f"/nSummary saved to {SUMMARY_FILE}")
-      
+    summary = message.content[0].text
+    parsed = json.loads(summary)  # validates JSON before saving
+
+    summary_file = os.path.join(BASE_DIR, f"../data/{api_name}_summary.json")
+    with open(summary_file, "w") as f:
+        json.dump(parsed, f, indent=2)
+
+    print(f"\nSummary saved to {summary_file}")  # typo fixed
+
+def main():
+    config = load_config()
+    for api in config["apis"]:
+        summarize_api(api["name"])
+
+if __name__ == "__main__":
+    main()
