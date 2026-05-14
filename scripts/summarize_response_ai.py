@@ -2,17 +2,14 @@ import os
 import json
 import anthropic
 
+# Load the API data we fetched in Script 1
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 CONFIG_PATH = os.path.join(BASE_DIR, "../config/api_config.json")
 
 def load_config():
     with open(CONFIG_PATH, "r") as f:
         return json.load(f)
-
-# Load the API data we fetched in Script 1
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    
-# Convert it into a string for the AI to process
-api_data_str = json.dumps(api_data, indent=2)
 
 # Set up the Anthropic client with your API key
 # It automatically reads your ANTHROPIC_API_KEY from the environment variables
@@ -57,13 +54,14 @@ def summarize_api(api_name):
     )
 
     summary = message.content[0].text
-    parsed = json.loads(summary)  # validates JSON before saving
+    summary = summary.strip().removeprefix("```json").removesuffix("```").strip()
+    parsed = json.loads(summary)
 
     summary_file = os.path.join(BASE_DIR, f"../data/{api_name}_summary.json")
     with open(summary_file, "w") as f:
         json.dump(parsed, f, indent=2)
 
-    print(f"\nSummary saved to {summary_file}")  # typo fixed
+    print(f"\nSummary saved to {summary_file}")
 
 def main():
     config = load_config()
